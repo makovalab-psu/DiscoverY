@@ -18,7 +18,7 @@ Note that currently the names of the "data" folder and of the files are hardcode
 
 A typical run of DiscoverY looks like this. 
 
-	python discoverY.py
+	python discoverY.py --female_bloom
 	
 
 DiscoverY accepts the following parameters. 

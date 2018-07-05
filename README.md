@@ -39,7 +39,7 @@ The output of DiscoverY is an annotated file with : ```proportion_annotated_cont
 
 To download, 
 
-	git clone https://github.com/md5sam/DiscoverY
+	git clone https://github.com/makovalab-psu/DiscoverY
 	
 DiscoverY also requires the numpy and biopython python packages in order to run the classifier plots.
 These packages can be installed on many  systems as follows:

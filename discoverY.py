@@ -1,0 +1,53 @@
+import argparse
+from scripts import classify_ctgs, kmers
+
+
+def main():
+    """
+    The following input files are required in ./data folder
+    1. contigs.fasta : Male contigs fasta file
+    2. kmers_from_reads : Kmers from male reads with their counts
+    3. female.bloom or female.fasta or female_kmers
+    """
+    parser = argparse.ArgumentParser(description='DiscoverY selects Y-specific contigs from a male assembly')
+    parser.add_argument('--female_bloom', help='Use if female BloomFilter provided (defaults to False)',
+                        action='store_true', required=False)
+    parser.add_argument('--female_kmers_set', help='Use if female kmers set provided (defaults to False)',
+                        action='store_true', required=False)
+    parser.add_argument('--kmer_size', help='Set kmer size (defaults to 25)', required=False)
+    args = vars(parser.parse_args())
+
+    k_size = 25
+    bloom_filt = False
+    female_kmers = False
+
+    # set kmer_size from argument or using default here
+    if not args['kmer_size']:
+        k_size = 25
+    else:
+        try:
+            k_size = int(args['kmer_size'])
+        except ValueError:
+            print "Error : kmer_size provided is not an integer"
+            kmers.exit_gracefully()
+
+    if args['female_bloom']:
+        bloom_filt = True
+
+    print "Started DiscoverY"
+
+    if args['female_kmers_set']:
+        female_kmers = True
+
+    # declare defaults
+    print "Using default of k=25 and input folder='data'"
+    print "Please set bloom filter size before running this program"
+
+    print "Shortlisting Y-contigs"
+    classify_ctgs.classify_ctgs(k_size, bloom_filt, female_kmers)
+
+    print "DiscoverY completed successfully"
+
+if __name__ == "__main__":
+    main()
+

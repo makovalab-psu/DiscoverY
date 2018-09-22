@@ -1,7 +1,7 @@
 from collections import defaultdict
 from Bio import SeqIO
 from pybloomfilter import BloomFilter
-from string import maketrans
+#from string import maketrans
 import sys
 
 
@@ -10,17 +10,18 @@ def exit_gracefully():
 
 
 def reverse_complement(seq):
-    complement_map = maketrans("ACGTNacgtn", "TGCANtgcan")
+    complement_map = str.maketrans("ACGTNacgtn", "TGCANtgcan")
     return seq[::-1].translate(complement_map)
 
 
 def kmerize(ip_string, kmer_size, step_size=1, offset=0):
     """
-    adding to bitbucket
     function that kmerizes an input_string and returns a list of kmers
     """
-    return [str(ip_string[i:i + kmer_size]).upper() for i in range(offset, len(ip_string) - kmer_size + 1, step_size)
-            if str(ip_string[i:i + kmer_size]).upper() != "N"*kmer_size]
+    
+    return [str(ip_string[i:i + kmer_size]) for i in range(offset, len(ip_string) - kmer_size + 1, step_size)
+            if str(ip_string[i:i + kmer_size]) != "N"*kmer_size]
+    
 
 
 def make_bloom_from_kmer_abundance(ip_kmer_set, kmer_size, bf_size, bf_filename, ignore_rc=True):
@@ -87,7 +88,7 @@ def test_parse_ctgs () :
     ip_fasta_file = "test/contigs.fasta"
     contigs = parse_ctgs_fasta(ip_fasta_file)
     for k, _ in contigs.iteritems() :
-        print k, contigs[k].seq
+        print(k, contigs[k].seq)
 
 
 # make a FASTA file with annotated contigs

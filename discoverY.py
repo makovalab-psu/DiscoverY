@@ -28,25 +28,25 @@ def main():
         try:
             k_size = int(args['kmer_size'])
         except ValueError:
-            print "Error : kmer_size provided is not an integer"
+            print("Error : kmer_size provided is not an integer")
             kmers.exit_gracefully()
 
     if args['female_bloom']:
         bloom_filt = True
 
-    print "Started DiscoverY"
+    print("Started DiscoverY")
 
     if args['female_kmers_set']:
         female_kmers = True
 
     # declare defaults
-    print "Using default of k=25 and input folder='data'"
-    print "Please set bloom filter size before running this program"
+    print("Using default of k=25 and input folder='data'")
+    print("Please set bloom filter size before running this program")
 
-    print "Shortlisting Y-contigs"
+    print("Shortlisting Y-contigs")
     classify_ctgs.classify_ctgs(k_size, bloom_filt, female_kmers)
 
-    print "DiscoverY completed successfully"
+    print("DiscoverY completed successfully")
 
 if __name__ == "__main__":
     main()

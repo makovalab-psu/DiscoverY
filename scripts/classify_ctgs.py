@@ -29,10 +29,11 @@ def classify_ctgs(kmer_size, bf, fem_kmers):
             all_female_kmers = []
             for record in SeqIO.parse(female_reference_file,"fasta"):
                 curr_seq = record.seq
-                to_kmerize_fwd = str(curr_seq)
-                to_kmerize_fwd_upper = to_kmerize_fwd.upper()
-                fwd_kmers_fem = kmers.kmerize(to_kmerize_fwd_upper, 25)
-                all_female_kmers.extend([kmer for kmer in fwd_kmers_fem])
+                to_kmerize_fwd = str(curr_seq).upper()
+                length = len(to_kmerize_fwd)
+                for i in range(0, length-25+1):
+                    all_female_kmers.append(to_kmerize_fwd[i:i+k])
+
             print("All kmerizing done, now converting to a set")
             female_kmers_set = set(all_female_kmers)
 
@@ -65,18 +66,17 @@ def classify_ctgs(kmer_size, bf, fem_kmers):
         print("Current contig ID is : ", contig)
 
         # convert the SeqRecord object's .seq into a string that needs to be kmerized
-        to_kmerize_fwd = str(all_male_ctgs[contig].seq)
-        fwd_kmers = kmers.kmerize(to_kmerize_fwd, kmer_size)
-        # reverse complement the contig
-        to_kmerize_rev = kmers.reverse_complement(str(all_male_ctgs[contig].seq))
-        rev_kmers = kmers.kmerize(to_kmerize_rev, kmer_size)[::-1]
+        to_kmerize_fwd = str(all_male_ctgs[contig].seq).upper()
 
+        length = len(to_kmerize_fwd)
+        reverse = kmers.reverse_complement(to_kmerize_fwd)
         count_of_male_kmers = 0
         count_of_male_kmers_not_shared_with_female = 0
         curr_kmer_abundances = []
-        for index, kmer in enumerate(fwd_kmers):
+        for i in range(0, length-25+1):
+            kmer = to_kmerize_fwd[i:i+25]
+            rev_kmer = reverse[i:i+25]
             count_of_male_kmers += 1
-            rev_kmer = rev_kmers[index]
             # feature 1 : compute proportion of kmers shared with female
             if kmer not in female_kmers_bf and rev_kmer not in female_kmers_bf:
                     count_of_male_kmers_not_shared_with_female += 1

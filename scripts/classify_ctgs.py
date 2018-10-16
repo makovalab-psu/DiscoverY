@@ -31,8 +31,8 @@ def classify_ctgs(kmer_size, bf, fem_kmers):
                 curr_seq = record.seq
                 to_kmerize_fwd = str(curr_seq).upper()
                 length = len(to_kmerize_fwd)
-                for i in range(0, length-25+1):
-                    all_female_kmers.append(to_kmerize_fwd[i:i+k])
+                for i in range(0, length-kmer_size+1):
+                    all_female_kmers.append(to_kmerize_fwd[i:i+kmer_size])
 
             print("All kmerizing done, now converting to a set")
             female_kmers_set = set(all_female_kmers)
@@ -60,7 +60,7 @@ def classify_ctgs(kmer_size, bf, fem_kmers):
 
     ctg_count = 0
     # for each contig in contigs.fasta, calculate proportion of kmers that are present in female data set
-    for contig, _ in all_male_ctgs.items():
+    for contig in all_male_ctgs.keys():
         ctg_count += 1
         print("No. of contigs seen so far: ", ctg_count)
         print("Current contig ID is : ", contig)
@@ -73,9 +73,9 @@ def classify_ctgs(kmer_size, bf, fem_kmers):
         count_of_male_kmers = 0
         count_of_male_kmers_not_shared_with_female = 0
         curr_kmer_abundances = []
-        for i in range(0, length-25+1):
-            kmer = to_kmerize_fwd[i:i+25]
-            rev_kmer = reverse[i:i+25]
+        for i in range(0, length-kmer_size+1):
+            kmer = to_kmerize_fwd[i:i+kmer_size]
+            rev_kmer = reverse[i:i+kmer_size]
             count_of_male_kmers += 1
             # feature 1 : compute proportion of kmers shared with female
             if kmer not in female_kmers_bf and rev_kmer not in female_kmers_bf:

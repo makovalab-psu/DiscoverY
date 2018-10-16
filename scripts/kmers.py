@@ -58,13 +58,13 @@ def make_set_from_kmer_abundance(ip_file, kmer_size, ignore_rc=False):
     function that settifies a large file with kmers and count
     file looks like : ATGCT 101
     """
-    kmers = []
+    kmers = set()
     with open(ip_file, 'r') as kmers_fp:
         for line in kmers_fp:
-            kmers.append(line[:kmer_size])
+            kmers.add(line[:kmer_size])
             if ignore_rc == False :
-                kmers.append(reverse_complement(line[:kmer_size]))
-    return set(kmers)
+                kmers.add(reverse_complement(line[:kmer_size]))
+    return kmers
 
 
 def make_dict_from_kmer_abundance (ip_file, kmer_size, ignore_rc=False):

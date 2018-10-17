@@ -8,7 +8,7 @@ from numpy import median
 
 
 def classify_ctgs(kmer_size, bf, fem_kmers):
-    contigs_fasta_file = "data/contigs.fasta"
+    contigs_fasta_file = "data/male_contigs.fasta"
     reads_kmers = "data/kmers_from_male_reads"
     # output
     annotated_records = []
@@ -21,33 +21,26 @@ def classify_ctgs(kmer_size, bf, fem_kmers):
     else:
         print("Need to make Bloom Filter of k-mers from female")
         print("Reading female reference one record at a time and k-merizing each record...")
+        bf_size = 3 * 1000 * 1000 * 1000
+        bf_filename = "data/female.bloom"
+        female_kmers_bf = BloomFilter(bf_size, .001, bf_filename)
+        
         if fem_kmers: # if female kmers file exist
             female_kmers_file = "data/female_kmers"
-            female_kmers_set = kmers.make_set_from_kmer_abundance(female_kmers_file, kmer_size)
+            with open(female_kmers_file, 'r') as fm_kmers:
+                for line in fm_kmers:
+                    female_kmers_bf.add(line[:kmer_size])
         else :
-            female_reference_file = "data/female.fasta"
-            all_female_kmers = []
+            female_reference_file = "data/female_noY.fasta"    
             for record in SeqIO.parse(female_reference_file,"fasta"):
-                curr_seq = record.seq
-                to_kmerize_fwd = str(curr_seq).upper()
+                to_kmerize_fwd = str(record.seq).upper()
                 length = len(to_kmerize_fwd)
                 for i in range(0, length-kmer_size+1):
-                    all_female_kmers.append(to_kmerize_fwd[i:i+kmer_size])
+                    female_kmers_bf.add(to_kmerize_fwd[i:i+kmer_size])
 
-            print("All kmerizing done, now converting to a set")
-            female_kmers_set = set(all_female_kmers)
+        print("Done creating bloom filter")
 
-        print("Here is a sample female kmer in set : ", next(iter(female_kmers_set)))
-        print("Cardinality of the female kmer set is : ", len(female_kmers_set))
-
-        print("Generating Bloom Filter of k-mers from female reference")
-        female_kmers_bf_size = 3000000000
-        male_and_absent_in_female_bf_filename = "data/female.bloom"
-        female_kmers_bf = kmers.make_bloom_from_kmer_abundance\
-            (female_kmers_set, kmer_size, female_kmers_bf_size,
-             male_and_absent_in_female_bf_filename, ignore_rc=True)
-        print("Done")
-
+    
     # make a dict of all kmers from male
     print("Generating a dictionary from kmers in kmers_from_male_reads")
     kmer_abundance_dict_from_male = defaultdict(int)
@@ -108,3 +101,4 @@ def classify_ctgs(kmer_size, bf, fem_kmers):
 
     kmers.write_annotated_contigs_to_fasta(annotated_records)
     return 1
+    

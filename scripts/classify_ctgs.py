@@ -96,10 +96,6 @@ def classify_ctgs(kmer_size, bf, fem_kmers, mode):
                 else:
                     annotated_records.append(SeqRecord(record.seq, id=record.id, description=str(length) + " " + str(proportion)))
 
-            if ctg_count % 20 == 0:
-                SeqIO.write(annotated_records, annotated_contigs_file, "fasta")
-                annotated_records.clear()
-
-        SeqIO.write(annotated_records, annotated_contgs_file, "fasta") 
+        SeqIO.write(annotated_records, annotated_contigs_file, "fasta") 
     return 1
     

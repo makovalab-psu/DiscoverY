@@ -15,6 +15,9 @@ def main():
     parser.add_argument('--female_kmers_set', help='Use if female kmers set provided (defaults to False)',
                         action='store_true', required=False)
     parser.add_argument('--kmer_size', help='Set kmer size (defaults to 25)', required=False)
+
+    parser.add_argument('--mode', required=True)
+    
     args = vars(parser.parse_args())
 
     k_size = 25
@@ -39,12 +42,14 @@ def main():
     if args['female_kmers_set']:
         female_kmers = True
 
+    mode = args["mode"]
+    print("MODE", mode)
     # declare defaults
     print("Using default of k=25 and input folder='data'")
     print("Please set bloom filter size before running this program")
-
     print("Shortlisting Y-contigs")
-    classify_ctgs.classify_ctgs(k_size, bloom_filt, female_kmers)
+    
+    classify_ctgs.classify_ctgs(k_size, bloom_filt, female_kmers, mode)
 
     print("DiscoverY completed successfully")
 

@@ -21,9 +21,6 @@ def make_bloom_from_kmer_abundance(ip_kmer_set, kmer_size, bf_size, bf_filename,
         if not ignore_rc :
             bf.add(reverse_complement(kmer))
         bf_count+=1
-        #if bf_count % 10000 == 0 :
-        #    print "Number of kmers add to BF so far is : ", bf_count
-    #bf.update(ip_kmer_set)
     return bf
 
 
@@ -42,7 +39,7 @@ def test_valid_kmer_format(sample_line, kmer_size):
         exit_gracefully()
 
 
-def make_dict_from_kmer_abundance (ip_file, kmer_size, ignore_rc=False):
+def make_dict_from_kmer_abundance (ip_file, kmer_size):
     kmer_dicts = defaultdict(int)
     with open(ip_file,'r') as file_handle1:
         first_line = file_handle1.readline()
@@ -50,7 +47,6 @@ def make_dict_from_kmer_abundance (ip_file, kmer_size, ignore_rc=False):
         for line in file_handle1:
             current_abundance = int(line.split(' ')[1])
             kmer_dicts[line[:kmer_size]] = current_abundance
-            # kmer_dicts[reverse_complement(line[:kmer_size])] = current_abundance
     return kmer_dicts
 
 

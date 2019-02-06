@@ -1,5 +1,5 @@
 # DiscoverY
-DiscoverY is a toool to shortlist Y-specific contigs from an assembly of male whole genome sequencing data, based on exact _k-mer_ matches with a female. This tool is platform agnostic and has been tested on male assemblies from Illumina, PacBio and 10x Genomics. The female can be a reference assembly or a low coverage raw reads dataset. 
+DiscoverY is a toool to shortlist Y-specific contigs from an assembly of male whole genome sequencing data, based on exact _k-mer_ matches with a female. This tool is platform agnostic and has been tested on male assemblies from Illumina, PacBio and 10x Genomics. The female can be a reference assembly or a low coverage raw reads dataset. DiscoverY can be ran in two different modes: female_only or female+male.  In the female_only mode, the proportion shared between each contig with a female reference is computed; female+male mode uses both proportion of k-mers of each contig shared with a reference female and the kmer counts from the male raw reads to estimate each contig's depth-of-coverage.
 
 
 ## Usage 
@@ -7,7 +7,7 @@ DiscoverY is a toool to shortlist Y-specific contigs from an assembly of male wh
 Before running DiscoverY, the following input files are required in ./data folder. 
 Note that currently the names of the "data" folder and of the files are hardcoded into DiscoverY.
 
-	contigs.fasta : contigs from WGS assembly, which will be annotated by running DiscoverY
+	male_contigs.fasta : contigs from WGS assembly, which will be annotated by running DiscoverY
 	kmers_from_male_reads : kmers from raw male reads used for assembly, used for computing coverage
 	[optional] female.bloom : Bloom Filter of kmers from female if available
 	[optional] female_kmers : kmers from female if Bloom Filter has not been constructed
@@ -18,7 +18,7 @@ Note that currently the names of the "data" folder and of the files are hardcode
 
 A typical run of DiscoverY looks like this. 
 
-	python discoverY.py --female_bloom
+	python discoverY.py --female_bloom --mode female+male
 	
 
 DiscoverY accepts the following parameters. 
@@ -32,6 +32,8 @@ DiscoverY accepts the following parameters.
 - --female_kmers_set
 
 - --kmers_size
+
+- --mode
 
 The output of DiscoverY is an annotated file with : ```proportion_annotated_contigs.fastq``` in which the fasta headers have information about the proportion shared with female. 
 

@@ -13,17 +13,6 @@ def reverse_complement(seq):
     return seq[::-1].translate(complement_map)
 
 
-def make_bloom_from_kmer_abundance(ip_kmer_set, kmer_size, bf_size, bf_filename, ignore_rc=True):
-    bf = BloomFilter(bf_size, 0.001, bf_filename)
-    bf_count = 0
-    for kmer in ip_kmer_set :
-        bf.add(kmer)
-        if not ignore_rc :
-            bf.add(reverse_complement(kmer))
-        bf_count+=1
-    return bf
-
-
 def test_valid_kmer_format(sample_line, kmer_size):
     sample_kmer_abun = sample_line.split(" ")
     if len(sample_kmer_abun) != 2:
@@ -44,11 +33,11 @@ def make_dict_from_kmer_abundance (ip_file, kmer_size):
     with open(ip_file,'r') as file_handle1:
         first_line = file_handle1.readline()
         test_valid_kmer_format(first_line, kmer_size)
+        file_handle1.seek(0)
         for line in file_handle1:
             current_abundance = int(line.split(' ')[1])
             kmer_dicts[line[:kmer_size]] = current_abundance
     return kmer_dicts
-
 
 
 # make a FASTA file with annotated contigs

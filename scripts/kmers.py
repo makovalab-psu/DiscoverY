@@ -40,9 +40,5 @@ def make_dict_from_kmer_abundance (ip_file, kmer_size):
     return kmer_dicts
 
 
-# make a FASTA file with annotated contigs
-def write_annotated_contigs_to_fasta (annotated_records) :
-    with open("proportion_annotated_contigs.fasta","w") as output_handle :
-        SeqIO.write(annotated_records, output_handle, "fasta")
-    return 1
+
 

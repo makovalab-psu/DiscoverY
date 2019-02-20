@@ -15,7 +15,6 @@ def getbloomFilter(bf, fem_kmers, kmer_size):
         print("Done")
     else:
         print("Need to make Bloom Filter of k-mers from female")
-        print("Reading female reference one record at a time and k-merizing each record...")
         bf_size = 3 * 1000 * 1000 * 1000
         bf_filename = "data/female.bloom"
         female_kmers_bf = BloomFilter(bf_size, .001, bf_filename)
@@ -23,10 +22,14 @@ def getbloomFilter(bf, fem_kmers, kmer_size):
         if fem_kmers: # if female kmers file exist
             female_kmers_file = "data/female_kmers"
             with open(female_kmers_file, 'r') as fm_kmers:
-                #assumes kmers are uppercase 
+                #assumes kmers are uppercase
+                first_line = fm_kmers.readline()
+                kmers.test_valid_kmer_format(first_line, kmer_size)
+                fm_kmers.seek(0)
                 for line in fm_kmers:
                     female_kmers_bf.add(line[:kmer_size])
         else :
+            print("Reading female reference one record at a time and k-merizing each record...")
             female_reference_file = "data/female.fasta"
             n_kmers = "N"*kmer_size
             for record in SeqIO.parse(female_reference_file,"fasta"):
@@ -119,13 +122,9 @@ def classify_fm_mode(kmer_size, female_kmers_bf):
             if kmer == n_kmers:
                 continue
             count_of_male_kmers += 1
-            if kmer not in female_kmers_bf:
+            if kmer not in female_kmers_bf and reverse[length-kmer_size-i:length-i] not in female_kmers_bf:
                 count_of_male_kmers_not_shared_with_female += 1
-            else:
-                rev_kmer = reverse[length-kmer_size-i:length-i]
-                if rev_kmer not in female_kmers_bf:
-                    count_of_male_kmers_not_shared_with_female += 1
-
+      
         print("Total No. of k-mers from this contig: ", count_of_male_kmers)
         print("No. of k-mers not shared with female: ", count_of_male_kmers_not_shared_with_female)
 

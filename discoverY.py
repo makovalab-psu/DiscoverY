@@ -16,7 +16,9 @@ def main():
                         action='store_true', required=False)
     parser.add_argument('--kmer_size', help='Set kmer size (defaults to 25)', required=False)
 
-    parser.add_argument('--mode', required=True)
+    parser.add_argument('--mode', help="Set to run in femal_only mode or female+male mode. \
+    In female_only mode, the proportion shared between each contig with a female reference is computed.\
+    In female+male mode, both the proportion of k-mers shared with the female and the median depth of coverage of each male contig is measure", required=True)
     
     args = vars(parser.parse_args())
 
@@ -43,7 +45,7 @@ def main():
         female_kmers = True
 
     mode = args["mode"]
-    print("MODE", mode)
+    print("Mode", mode)
     # declare defaults
     print("Using default of k=25 and input folder='data'")
     print("Please set bloom filter size before running this program")

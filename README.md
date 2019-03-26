@@ -37,6 +37,15 @@ DiscoverY accepts the following parameters.
 
 The output of DiscoverY is an annotated file with : ```proportion_annotated_contigs.fastq``` in which the fasta headers have information about the proportion shared with female. 
 
+
+### DiscoverY in 'best' mode
+To run DiscoverY in 'best' mode, the jupyter notebook classifier.ipynb in the classifier folder may be used, as follows :
+
+        cd classifier
+        jupyter notebook classifier.ipynb
+
+This notebook uses labeled data to pick the best threshold of male_coverage and female_proportion to retrieve Y-contigs, by using a Linear SVM classifier. The precision and recall for the best combination is reported in the notebook, and a plot is generated with Y-contigs and the chosen threshold. 
+
 ## Installation 
 
 To download, 

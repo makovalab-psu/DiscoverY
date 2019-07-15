@@ -25,7 +25,7 @@ DiscoverY accepts the following parameters.
 
 - --help: print usage information.
 
-- --female_bloom: pass in option if an existing bloom filter will be used. If this option is not passed in, a bloom filter will be created by k-mering the female reference (data/female.fasta).
+- --female_bloom: pass in option if an existing bloom filter will be used. If this option is not passed in, a bloom filter will be created by k-merizing the female reference (data/female.fasta).
 
 - --female_kmers_set: pass in option if a bloom filter should be created from the female_kmers file
 
@@ -61,15 +61,19 @@ To download,
 DiscoverY is written in Python 3 and requires some dependencies to be installed.
 
 For the female_only and female+male modes used to annotate the contigs, the following packages can installed as follows:
+
     pip install numpy
     pip install biopython
     pip install cython
     pip install pybloomfiltermmap3
 
+
 If the user also choses to run DiscoverY in best mode, the following dependencies should also be installed:
+
     pip install sklearn
     pip install matplotlib
     pip install seaborn
+
 
 DiscoverY also uses the k-mer counter DSK. The latest DSK binaries (v2.2.0 for Linux 64 bit and v2.2.0 for Mac OSX) are provided in the dependency folder. Thus, if you are using either of these operating systems, DSK need not be installed, and you may use the binaries as provided. For other operating systems, or if alternate versions or functionality of DSK is desired, see https://gatb.inria.fr/software/dsk/.
 

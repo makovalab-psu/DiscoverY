@@ -1,6 +1,5 @@
 # DiscoverY
-DiscoverY is a toool to shortlist Y-specific contigs from an assembly of male whole genome sequencing data, based on exact _k-mer_ matches with a female. This tool is platform agnostic and has been tested on male assemblies from Illumina, PacBio and 10x Genomics. The female can be a reference assembly or a low coverage raw reads dataset. DiscoverY can be ran in two different modes: female_only or female+male.  In the female_only mode, the proportion shared between each contig with a female reference is computed; female+male mode uses both proportion of k-mers of each contig shared with a reference female and the kmer counts from the male raw reads to estimate each contig's depth-of-coverage.
-
+DiscoverY is a tool to shortlist Y-specific contigs from an assembly of male whole genome sequencing data, based on exact _k-mer_ matches with a female. This tool is platform agnostic and has been tested on male assemblies from Illumina, PacBio and 10x Genomics. The female can be a reference assembly or a low coverage raw reads dataset. DiscoverY can be ran in two different modes: female_only or female+male.  In the female_only mode, the proportion shared between each contig with a female reference is computed; female+male mode uses both proportion of k-mers of each contig shared with a reference female and the kmer counts from the male raw reads to estimate each contig's depth-of-coverage.
 
 ## Usage 
 
@@ -19,27 +18,34 @@ Note that currently the names of the "data" folder and of the files are hardcode
 A typical run of DiscoverY looks like this. 
 
 	python discoverY.py --female_bloom --mode female+male
-	
-
+ 
 DiscoverY accepts the following parameters. 
 
 	python discoverY.py [--help] 
 
 - --help: print usage information.
 
-- --female_bloom
+- --female_bloom: pass in option if an existing bloom filter will be used. If this option is not passed in, a bloom filter will be created by k-mering the female reference (data/female.fasta).
 
-- --female_kmers_set
+- --female_kmers_set: pass in option if a bloom filter should be created from the female_kmers file
 
-- --kmers_size
+- --kmers_size: sets k-mer size
 
-- --mode
+- --mode: set to female_only or female+male
 
-The output of DiscoverY is an annotated file with : ```proportion_annotated_contigs.fastq``` in which the fasta headers have information about the proportion shared with female. 
+The output of DiscoverY is an annotated file: ```proportion_annotated_contigs.fasta``` in which the fasta headers have information about the proportion shared with female and estimated depth of coverage. 
+
+The fasta file will be annotated like the following in the female_only mode:
+
+`>record_id length_of_contig proportion_shared_with_female`
+
+And in female+male mode:
+
+`>record_id length_of_contig proportion_shared_with_female median_k-mer_abundance`
 
 
 ### DiscoverY in 'best' mode
-To run DiscoverY in 'best' mode, the jupyter notebook classifier.ipynb in the classifier folder may be used, as follows :
+If the user has a labeled dataset, Discover Y can be run in 'best' mode after obtaining the annotated male contigs. The jupyter notebook classifier.ipynb in the classifier folder may be used, as follows:
 
         cd classifier
         jupyter notebook classifier.ipynb
@@ -52,11 +58,16 @@ To download,
 
 	git clone https://github.com/makovalab-psu/DiscoverY
 	
-DiscoverY also requires the numpy and biopython python packages in order to run the classifier plots.
-These packages can be installed on many  systems as follows:
+DiscoverY is written in Python 3 and requires some dependencies to be installed.
 
+For the female_only and female+male modes used to annotate the contigs, the following packages can installed as follows:
     pip install numpy
     pip install biopython
+    pip install cython
+    pip install pybloomfiltermmap3
+
+If the user also choses to run DiscoverY in best mode, the following dependencies should also be installed:
+    pip install sklearn
     pip install matplotlib
     pip install seaborn
 
@@ -64,8 +75,7 @@ DiscoverY also uses the k-mer counter DSK. The latest DSK binaries (v2.2.0 for L
 
 ## Example
 
-An example is provided in the /data folder.
-
+The /data folder contains example data.
 
 
 ## Input files
@@ -118,7 +128,6 @@ The following scripts are included with this distribution of DiscoverY, and are 
 	output : annotated contigs with proportions shared with female
 
 	
-
 ## License
 This program is released under the MIT License. Please see LICENSE.md for details
 

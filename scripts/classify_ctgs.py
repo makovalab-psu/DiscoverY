@@ -8,16 +8,15 @@ from numpy import median
 
 
 
-def getbloomFilter(bf, fem_kmers, kmer_size):
+def getbloomFilter(bf, bf_capacity, fem_kmers, kmer_size):
     if bf:
         print("Opening Bloom Filter of k-mers from female")
         female_kmers_bf = BloomFilter.open("data/female.bloom")
         print("Done")
     else:
         print("Need to make Bloom Filter of k-mers from female")
-        bf_size = 3 * 1000 * 1000 * 1000
         bf_filename = "data/female.bloom"
-        female_kmers_bf = BloomFilter(bf_size, .001, bf_filename)
+        female_kmers_bf = BloomFilter(bf_capacity, .001, bf_filename)
 
         if fem_kmers: # if female kmers file exist
             female_kmers_file = "data/female_kmers"
@@ -138,8 +137,8 @@ def classify_fm_mode(kmer_size, female_kmers_bf):
     annotated_contigs.close()
     return
 
-def classify_ctgs(kmer_size, bf, fem_kmers, mode):
-    female_kmers_bf = getbloomFilter(bf, fem_kmers, kmer_size)
+def classify_ctgs(kmer_size, bf, bf_capacity, fem_kmers, mode):
+    female_kmers_bf = getbloomFilter(bf, bf_capacity, fem_kmers, kmer_size)
     if mode == "female+male":
         classify_fm_male_mode(kmer_size, female_kmers_bf)
     elif mode == "female_only":

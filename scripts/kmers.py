@@ -1,16 +1,21 @@
 from collections import defaultdict
-from Bio import SeqIO
-from pybloomfilter import BloomFilter
 import sys
 
 
 def exit_gracefully():
     sys.exit("^DiscoverY exited with error, please see the message above.^")
 
-
-def reverse_complement(seq):
-    complement_map = str.maketrans("ACGTNacgtn", "TGCANtgcan")
-    return seq[::-1].translate(complement_map)
+try:
+	# for python 3, where maketrans() is a function
+	from string import maketrans
+	complement_map = maketrans("ACGTNacgtn", "TGCANtgcan")
+	def reverse_complement(seq):
+	    return seq[::-1].translate(complement_map)
+except ImportError:
+	# for python 3, where maketrans() is a class function
+	def reverse_complement(seq):
+	    complement_map = str.maketrans("ACGTNacgtn", "TGCANtgcan")
+	    return seq[::-1].translate(complement_map)
 
 
 def test_valid_kmer_format(sample_line, kmer_size):

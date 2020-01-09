@@ -15,6 +15,9 @@ def main():
     parser.add_argument('--female_kmers_set', help='Use if female kmers set provided (defaults to False)',
                         action='store_true', required=False)
     parser.add_argument('--kmer_size', help='Set kmer size (defaults to 25)', required=False)
+    parser.add_argument("--female_bloom_capacity", type=int, help="If female BloomFilter is not provided, \
+    This sets the capacity of the bloom filter. This should be greater than the number of distinct kmers \
+    in female.fasta or female_kmers.")
 
     parser.add_argument('--mode', help="Set to run in femal_only mode or female+male mode. \
     In female_only mode, the proportion shared between each contig with a female reference is computed.\
@@ -38,6 +41,14 @@ def main():
 
     if args['female_bloom']:
         bloom_filt = True
+    elif args['female_bloom_capacity']:
+        try:
+            bf_capacity = int(args['female_bloom_capacity'])
+        except ValueError:
+            print("Error : female_bloom_capacity provided is not an integer")
+            kmers.exit_gracefully()
+    else:
+        bf_capacity = 3 * 1000 * 1000 * 1000
 
     print("Started DiscoverY")
 
@@ -48,10 +59,9 @@ def main():
     print("Mode", mode)
     # declare defaults
     print("Using default of k=25 and input folder='data'")
-    print("Please set bloom filter size before running this program")
     print("Shortlisting Y-contigs")
-    
-    classify_ctgs.classify_ctgs(k_size, bloom_filt, female_kmers, mode)
+
+    classify_ctgs.classify_ctgs(k_size, bloom_filt, bf_capacity, female_kmers, mode)
 
     print("DiscoverY completed successfully")
 

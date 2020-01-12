@@ -137,6 +137,8 @@ This program is released under the MIT License. Please see LICENSE.md for detail
 
 
 ## Citation
-If you use DiscoverY in your research, please cite this repository. 
+If you use DiscoverY in your research, please cite : 
+
+Rangavittal, S., Stopa, N., Tomaszkiewicz, M. et al. BMC Genomics (2019) 20: 641. https://doi.org/10.1186/s12864-019-5996-3
 
 

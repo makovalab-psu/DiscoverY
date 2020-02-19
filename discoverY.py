@@ -41,6 +41,7 @@ def main():
 
     if args['female_bloom']:
         bloom_filt = True
+        bf_capacity = None
     elif args['female_bloom_capacity']:
         try:
             bf_capacity = int(args['female_bloom_capacity'])
